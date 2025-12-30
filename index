@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>16タイプ診断 起動</title>
+
+  <!-- LIFF SDK -->
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<p id="status">起動中です…</p>
+
+<script>
+async function main() {
+  const status = document.getElementById("status");
+
+  try {
+    status.innerText = "LIFF初期化中…";
+
+    // ▼ あなたの最新LIFF ID
+    await liff.init({
+      liffId: "2008801940-ObLOZHyA"
+    });
+
+    // ▼ LINE未ログインならログインへ
+    if (!liff.isLoggedIn()) {
+      status.innerText = "LINEログイン中…";
+      liff.login();
+      return;
+    }
+
+    status.innerText = "ユーザー情報取得中…";
+
+    // ▼ LINEユーザー情報取得
+    const profile = await liff.getProfile();
+    const userId = profile.userId;
+
+    // ▼ Googleフォーム（userIdを自動埋め込み）
+    const formUrl =
+      "https://docs.google.com/forms/d/e/1FAIpQLSdPMYVJGOKXUSjfsDbZzydYn8hArBIH7mGZ0uNGrda-3mit2A/viewform"
+      + "?entry.1832876883=" + encodeURIComponent(userId);
+
+    status.innerText = "アンケートへ移動します…";
+
+    // ▼ 外部ブラウザで確実に開く
+    liff.openWindow({
+      url: formUrl,
+      external: true
+    });
+
+    // ▼ LIFF画面は閉じる（LINEに戻す）
+    setTimeout(() => {
+      liff.closeWindow();
+    }, 500);
+
+  } catch (error) {
+    status.innerText = "エラーが発生しました";
+    console.error(error);
+  }
+}
+
+main();
+</script>
+
+</body>
+</html>
