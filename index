@@ -27,7 +27,7 @@ async function main() {
 
     // ▼ LINE未ログインならログインへ
     if (!liff.isLoggedIn()) {
-      status.innerText = "LINEログイン中…";
+      status.innerText = "LINEログイン中…友達追加がまだの場合、先に登録をお願いいたします";
       liff.login();
       return;
     }
