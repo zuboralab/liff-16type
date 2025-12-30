@@ -1,0 +1,1 @@
+# liff-16type
